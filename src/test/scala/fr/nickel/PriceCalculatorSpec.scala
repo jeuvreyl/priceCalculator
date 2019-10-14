@@ -3,6 +3,15 @@ package fr.nickel
 import org.scalatest._
 
 class PriceCalculatorSpec extends FlatSpec with Matchers {
+  "The PriceCalculator object evaluate" should "throw a NullPointer for a null map" in {
+    a[NullPointerException] should be thrownBy (PriceCalculator.evaluate(null))
+  }
+
+  "The PriceCalculator object evaluate" should "be 0 for an empty map" in {
+    PriceCalculator.evaluate(
+      Map()) shouldEqual 0
+  }
+
   "The PriceCalculator object evaluate" should "be 51.20" in {
     PriceCalculator.evaluate(
       Map("I" -> 2,
@@ -12,7 +21,7 @@ class PriceCalculatorSpec extends FlatSpec with Matchers {
         "V" -> 1)) shouldEqual 51.20
   }
 
-  "The PriceCalculator object evaluate" should "be 30" in {
+  it should "be 30" in {
     PriceCalculator.evaluate(
       Map("I" -> 1,
         "II" -> 1,
@@ -21,7 +30,7 @@ class PriceCalculatorSpec extends FlatSpec with Matchers {
         "V" -> 1)) shouldEqual 30
   }
 
-  "The PriceCalculator object evaluate" should "be 29.6" in {
+  it should "be 29.6" in {
     PriceCalculator.evaluate(
       Map("I" -> 2,
         "IV" -> 1,
@@ -46,8 +55,8 @@ class PriceCalculatorSpec extends FlatSpec with Matchers {
         "V" -> 1)
   }
 
-  "The PriceCalculator object buildReductionGraph" should "calculate price correctly with no reduction" in {
-    PriceCalculator.buildReductionGraph(
+  "The PriceCalculator object estimatePossibleReductions" should "calculate price correctly with no reduction" in {
+    PriceCalculator.estimatePossibleDiscounts(
       Map("I" -> 2,
         "II" -> 2,
         "III" -> 2,
