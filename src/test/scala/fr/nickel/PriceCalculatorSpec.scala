@@ -18,7 +18,7 @@ class PriceCalculatorSpec extends FlatSpec with Matchers {
         "II" -> 2,
         "III" -> 2,
         "IV" -> 1,
-        "V" -> 1)) shouldEqual 51.20
+        "V" -> 1)) shouldEqual BigDecimal("51.20")
   }
 
   it should "be 30" in {
@@ -27,18 +27,18 @@ class PriceCalculatorSpec extends FlatSpec with Matchers {
         "II" -> 1,
         "III" -> 1,
         "IV" -> 1,
-        "V" -> 1)) shouldEqual 30
+        "V" -> 1)) shouldEqual BigDecimal(30)
   }
 
   it should "be 29.6" in {
     PriceCalculator.evaluate(
       Map("I" -> 2,
         "IV" -> 1,
-        "V" -> 1)) shouldEqual 29.6
+        "V" -> 1)) shouldEqual BigDecimal("29.6")
   }
 
   "The PriceCalculator object evaluatePrice" should "be 25.6" in {
-    PriceCalculator.evaluatePrice(Set("I", "II", "III", "IV")) shouldEqual 25.6
+    PriceCalculator.evaluatePrice(Set("I", "II", "III", "IV")) shouldEqual BigDecimal("25.6")
   }
 
   "The PriceCalculator object updateBooksAmounts" should "update correctly" in {
@@ -62,6 +62,6 @@ class PriceCalculatorSpec extends FlatSpec with Matchers {
         "III" -> 2,
         "IV" -> 1,
         "V" -> 1),
-      42, List()) shouldEqual Set(106)
+      BigDecimal("42"), List()) shouldEqual Set(BigDecimal("106"))
   }
 }

@@ -1,15 +1,19 @@
 package fr.nickel
 
-object PriceCalculator extends App {
+object PriceCalculator {
 
   /**
    * Book Price constant.
    */
-  private lazy val price = 8.0;
+  private lazy val price = BigDecimal("8");
   /**
    * Prices for each corresponding reductions.
    */
-  private lazy val prices = Map[Int, Double](2 -> (1 - 0.05) * price, 3 -> (1 - 0.10) * price, 4 -> (1 - 0.2) * price, 5 -> (1 - 0.25) * price)
+  private lazy val prices = Map[Int, BigDecimal](
+    2 -> (1 - BigDecimal("0.05")) * price,
+    3 -> (1 - BigDecimal("0.10")) * price,
+    4 -> (1 - BigDecimal("0.2")) * price,
+    5 -> (1 - BigDecimal("0.25")) * price)
 
   /**
    * Main entry point for calculation.
@@ -17,13 +21,17 @@ object PriceCalculator extends App {
    * @param booksWithNumber name of book with corresponding numbers
    * @return the total price with the best discounts possible
    */
-  def evaluate(booksWithNumber: Map[String, Int]): Double = {
-    if (booksWithNumber == null) throw new NullPointerException("A not null map is required")
+  def evaluate(booksWithNumber: Map[String, Int]): BigDecimal = {
+    if (booksWithNumber == null) {
+      throw new NullPointerException("A not null map is required")
+    }
 
-    if (booksWithNumber.isEmpty) return 0
+    if (booksWithNumber.isEmpty) {
+      return 0
+    }
 
     val reductions = booksWithNumber.keySet.subsets().toList.filter(_.size >= 2).sortWith(_.size > _.size)
-    estimatePossibleDiscounts(booksWithNumber, 0, reductions).min
+    estimatePossibleDiscounts(booksWithNumber, BigDecimal("0"), reductions).min
   }
 
   /**
@@ -32,8 +40,8 @@ object PriceCalculator extends App {
    * @param discount current applied discount
    * @return the corresponding price
    */
-  def evaluatePrice(discount: Set[String]): Double = {
-    this.prices.getOrElse(discount.size, 0.0) * discount.size
+  def evaluatePrice(discount: Set[String]): BigDecimal = {
+    this.prices.getOrElse(discount.size, BigDecimal("0")) * BigDecimal(discount.size)
   }
 
   /**
@@ -45,7 +53,7 @@ object PriceCalculator extends App {
    * @param discounts       possible discounts
    * @return a set of the prices for all calculated discount combinations
    */
-  def estimatePossibleDiscounts(booksWithNumber: Map[String, Int], currentPrice: Double, discounts: List[Set[String]]): Set[Double] = {
+  def estimatePossibleDiscounts(booksWithNumber: Map[String, Int], currentPrice: BigDecimal, discounts: List[Set[String]]): Set[BigDecimal] = {
     if (booksWithNumber.isEmpty) {
       return Set(currentPrice)
     }
