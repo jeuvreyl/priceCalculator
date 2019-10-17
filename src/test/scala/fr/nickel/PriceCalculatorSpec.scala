@@ -33,6 +33,8 @@ class PriceCalculatorSpec extends FlatSpec with Matchers {
   it should "be 29.6" in {
     PriceCalculator.evaluate(
       Map("I" -> 2,
+        "II" -> 0,
+        "III" -> 0,
         "IV" -> 1,
         "V" -> 1)) shouldEqual BigDecimal("29.6")
   }

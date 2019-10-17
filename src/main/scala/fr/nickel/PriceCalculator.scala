@@ -30,7 +30,7 @@ object PriceCalculator {
       return 0
     }
 
-    val reductions = booksWithNumber.keySet.subsets().toList.filter(_.size >= 2).sortWith(_.size > _.size)
+    val reductions = booksWithNumber.filter(_._2 > 0).keySet.subsets().toList.filter(_.size >= 2).sortWith(_.size > _.size)
     estimatePossibleDiscounts(booksWithNumber, BigDecimal("0"), reductions).min
   }
 
@@ -40,7 +40,7 @@ object PriceCalculator {
    * @param discount current applied discount
    * @return the corresponding price
    */
-  def evaluatePrice(discount: Set[String]): BigDecimal = {
+  private[nickel] def evaluatePrice(discount: Set[String]): BigDecimal = {
     this.prices.getOrElse(discount.size, BigDecimal("0")) * BigDecimal(discount.size)
   }
 
@@ -53,7 +53,7 @@ object PriceCalculator {
    * @param discounts       possible discounts
    * @return a set of the prices for all calculated discount combinations
    */
-  def estimatePossibleDiscounts(booksWithNumber: Map[String, Int], currentPrice: BigDecimal, discounts: List[Set[String]]): Set[BigDecimal] = {
+  private[nickel] def estimatePossibleDiscounts(booksWithNumber: Map[String, Int], currentPrice: BigDecimal, discounts: List[Set[String]]): Set[BigDecimal] = {
     if (booksWithNumber.isEmpty) {
       return Set(currentPrice)
     }
@@ -78,7 +78,7 @@ object PriceCalculator {
    * @param discount        applied discount
    * @return updated book-number map
    */
-  def updateBooksAmounts(booksWithNumber: Map[String, Int], discount: Set[String]) = {
+  private[nickel] def updateBooksAmounts(booksWithNumber: Map[String, Int], discount: Set[String]) = {
     booksWithNumber.transform((key, value) => {
       if (discount.contains(key)) {
         value - 1
